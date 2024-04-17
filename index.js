@@ -15,12 +15,6 @@ require("./schemas/schema.js");
 
 
 
-// (async function print(){
-//   const hashedPassword = await bcrypt.hash('mukesh', 10);
-// console.log(hashedPassword==='$2b$10$n32cEqNXSzlpgGoxycUpjeZBR/5Kvftj.Lg1ywOWI47msNi0sJvOK');
-// })();  
-
-// getPgVersion();   // to connenct with neon db
 
 
 const app = express();

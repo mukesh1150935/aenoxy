@@ -122,6 +122,67 @@
  *         description: Unauthorized, missing or invalid token
  *       '500':
  *         description: Internal server error
+ *
+ * 
+ * /users/{email}/courses:
+ *   get:
+ *     summary: Get courses of a user by email
+ *     tags: [Courses]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Course'
+ *     responses:
+ *       '200':
+ *         description: Course updated successfully
+ *       '401':
+ *         description: Unauthorized, missing or invalid token
+ *       '403':
+ *         description: Forbidden, user is not a super admin
+ *       '500':
+ *         description: Internal server error
+ * 
+ * 
+ * /users/{email}:
+ *   get:
+ *     summary: Get profile of a particular user
+ *     tags: [Courses]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Course'
+ *     responses:
+ *       '200':
+ *         description: Course updated successfully
+ *       '401':
+ *         description: Unauthorized, missing or invalid token
+ *       '403':
+ *         description: Forbidden, user is not a super admin
+ *       '500':
+ *         description: Internal server error
+ * 
+ * 
+ * 
  */
 
 /**
@@ -181,7 +242,7 @@
  *         schema:
  *           type: string
  *     requestBody:
- *       required: true
+ *       required: false
  *       content:
  *         application/json:
  *           schema:
@@ -195,9 +256,8 @@
  *         description: Forbidden, user is not a super admin
  *       '500':
  *         description: Internal server error
- * 
- * /courses/{id}:
- *   delete:
+ *  
+ *   delete:   
  *     summary: Delete a course (SuperAdmin)
  *     tags: [SuperAdmin]
  *     security:
@@ -208,6 +268,23 @@
  *         required: true
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Course'
  *     responses:
  *       '200':
+ *         description: Course delelted successfully
+ *       '401':
+ *         description: Unauthorized, missing or invalid token
+ *       '403':
+ *         description: Forbidden, user is not a super admin
+ *       '500':
+ *         description: Internal server error
+ * 
  */
+
+
+

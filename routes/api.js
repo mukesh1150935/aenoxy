@@ -8,7 +8,6 @@ const Router=express.Router();
 Router.post('/register',registerUser);
 Router.post('/login',loginUser);
 
-Router.get('/users/:email',authenticateUser,getProfile);
 Router.get('/courses',authenticateUser,getCourses);
 
 
@@ -21,6 +20,8 @@ Router.delete('/courses:id',authenticateUser,superAdminMiddleware,deleteCourse);
 
 Router.post('/enroll',authenticateUser,enrollInCourse);
 Router.get('/users/:email/courses',authenticateUser,coursesOfUser);
+Router.get('/users/:email',authenticateUser,getProfile);
+
 
 
 

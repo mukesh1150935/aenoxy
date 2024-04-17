@@ -16,12 +16,10 @@ let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 //   },
 // });
 
-// // Ensure your database connection details are set in environment variables
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    // Use sslmode=require to enforce SSL encryption
-    rejectUnauthorized: false, // Set to false if using self-signed certificates (not recommended for production)
+    rejectUnauthorized: false, 
     sslmode: 'require'
 }
 });
