@@ -20,9 +20,10 @@ require("./schemas/schema.js");
 const app = express();
 const PORT = 3000 || process.env.PORT;
 app.use(express.json());
+app.use(bodyParser.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/", Router);
-app.use(bodyParser.json());
+
 
 
 

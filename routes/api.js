@@ -3,9 +3,20 @@ const {getAllUsers,getCourses,getProfile,addCourse,updateCourse,deleteCourse,enr
 const {registerUser,loginUser} = require('../controllers/register.js');
 const {authenticateUser,superAdminMiddleware} = require('../middlewares/userAuth.js');
 const Router=express.Router();
+const multer = require('multer');   
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    fileFilter: function (req, file, cb) {
+      if (file.mimetype === 'image/jpeg'||file.mimetype === 'image/jpg'||file.mimetype === 'image/png') {
+        cb(null, true);
+      } else {
+        cb(new Error('Only JPEG files are allowed'));
+      }
+    }
+  });
 
-
-Router.post('/register',registerUser);
+Router.post('/register',upload.single('profiile'),registerUser);
 Router.post('/login',loginUser);
 
 Router.get('/courses',authenticateUser,getCourses);
@@ -15,7 +26,7 @@ Router.get('/courses',authenticateUser,getCourses);
 Router.get('/users',authenticateUser,superAdminMiddleware,getAllUsers);  
 Router.post('/course',authenticateUser,superAdminMiddleware,addCourse);
 Router.put('/courses/:id',authenticateUser,superAdminMiddleware,updateCourse);
-Router.delete('/courses:id',authenticateUser,superAdminMiddleware,deleteCourse);
+Router.delete('/courses/:id',authenticateUser,superAdminMiddleware,deleteCourse);
 
 
 Router.post('/enroll',authenticateUser,enrollInCourse);

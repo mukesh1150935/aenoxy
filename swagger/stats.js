@@ -13,6 +13,7 @@
  *           type: string
  *         profiile:
  *           type: string
+ *           format: binary
  *     Course:
  *       type: object
  *       properties:
@@ -28,7 +29,26 @@
  *           type: number
  *         photo:
  *           type: string
+ * 
+ * 
+ *   securitySchemes: 
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *   
+ *   security:
+ *   - bearerAuth: []
+ * 
+ * 
+ * 
  */
+
+
+
+
+
+
 
 /**
  * @swagger
@@ -43,7 +63,7 @@
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             $ref: '#/components/schemas/User'
  *     responses:
@@ -88,17 +108,39 @@
  * 
  * /courses:
  *   get:
- *     summary: Get all courses
+ *     summary: Get courses with pagination
  *     tags: [Courses]
- *     security:
- *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: level
+ *         schema:
+ *           type: integer
+ *         description: Filter courses by level
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
  *     responses:
  *       '200':
  *         description: Successful operation, returns a list of courses
- *       '401':
- *         description: Unauthorized, missing or invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Course'
  *       '500':
  *         description: Internal server error
+ * 
+ * 
  * 
  * /enroll:
  *   post:

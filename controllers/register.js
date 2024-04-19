@@ -12,11 +12,22 @@ cloudinary.config(process.env.cloudinary_config);
 const secretKey = process.env.secretKey;
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    if (file.mimetype === 'image/jpeg'||file.mimetype === 'image/jpg'||file.mimetype === 'image/png') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only JPEG files are allowed'));
+    }
+  }
+});
+
 
 const registerUser = async (req, res) => {
   try {
-    const { name, password, email, profile_image } = req.body;
+    const { name, password, email } = req.body;
+    console.log(req.file);
 
     // if email already exists
     const existingUser = await getUserByEmail(email);
@@ -26,20 +37,21 @@ const registerUser = async (req, res) => {
 
     //hashing the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    let profileImageUrl = "";
-    if (profile_image) {
-      const result = await cloudinary.uploader.upload(profile_image, {
-        folder: "profile_images",
-      });
-      profileImageUrl = result.secure_url;
-    }
-    // console.log(profileImageUrl);
+  
+    const profile_image=req.file;
+    // Upload profile image to Cloudinary
+    let profileImageUrl = '';
+    // if (profile_image) {
+    //   const result = await cloudinary.uploader.upload(profile_image, {
+    //     folder: 'profile_images'
+    //   });
+    //   profileImageUrl = result.secure_url;
+    // }
 
     // database query
     await pool.query(
-      "INSERT INTO users (name, email, password) VALUES ($1, $2, $3)",
-      [name, email, hashedPassword]
+      "INSERT INTO users (name, email, password, profiile) VALUES ($1, $2, $3, $4)",
+      [name, email, hashedPassword,profileImageUrl]
     );
 
     // const resend = new Resend("re_hRaQDjry_8HXKEvowTCNPG9AyFSYWW7wz");
@@ -64,7 +76,7 @@ const registerUser = async (req, res) => {
 
     res.status(201).json({
       message:
-        "User registered successfully. Please check your email for verification.",
+        "User registered successfully",
       // profileImageUrl,
     });
   } catch (error) {
