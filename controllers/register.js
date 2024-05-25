@@ -41,12 +41,13 @@ const registerUser = async (req, res) => {
     const profile_image=req.file;
     // Upload profile image to Cloudinary
     let profileImageUrl = '';
-    // if (profile_image) {
-    //   const result = await cloudinary.uploader.upload(profile_image, {
-    //     folder: 'profile_images'
-    //   });
-    //   profileImageUrl = result.secure_url;
-    // }
+    if (profile_image) {
+      const result = await cloudinary.uploader.upload(profile_image, {
+        folder: 'profile_images'
+      });
+      profileImageUrl = result.secure_url;
+    }
+
 
     // database query
     await pool.query(
@@ -74,9 +75,12 @@ const registerUser = async (req, res) => {
     //   console.log({ data });
     // })();
 
+
+    console.log(name,email,profileImageUrl);
     res.status(201).json({
       message:
         "User registered successfully",
+      user:{name,email,profile_image}
       // profileImageUrl,
     });
   } catch (error) {
